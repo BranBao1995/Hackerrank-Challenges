@@ -59,7 +59,3 @@ var jsonStringify = function (object) {
 };
 
 console.log(jsonStringify(obj));
-
-// const test = [1, 2, 3];
-
-// console.log(Array.isArray(test));
