@@ -58,16 +58,22 @@ var longestPalindrome = function (s) {
   }
 
   // change diagnoal element to values of 'true'
+  // because every character by itself is palindrome
   for (let i = 0; i < n; i++) {
     dp[i][i] = true;
   }
 
+  // if dp[start][end] === true then it means the substring is palindrome
   for (let end = 0; end < n; end++) {
     for (let start = end - 1; start > -1; start--) {
+      // start from 'end', and move left to check whether or not the substring is palindrome
       if (s[start] === s[end]) {
+        // if yes
         if (end - start === 1 || dp[start + 1][end - 1] === true) {
-          dp[start][end] = true;
+          // check whether or not the substring only contains two side-by-side characters, or the inner substring within this substring is also palindrome
+          dp[start][end] = true; // if yes, it means the current substring has to be a palindrome string too
           if (end - start + 1 > maxLength) {
+            // check if this palindrome substring's length is greater than the existing max
             maxLength = end - start + 1;
             res = s.substring(start, end + 1);
           }
