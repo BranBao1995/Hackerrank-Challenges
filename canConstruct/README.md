@@ -5,3 +5,4 @@
 - See if any of the substrings in the array can construct the target word.
 - You may reuse elements of the array as many times as need.
 - return true or false.
+- If given an empty string '' as the target word, return true.
