@@ -15,7 +15,7 @@ const fibonacci = (position) => {
   return fibonacci(position - 1) + fibonacci(position - 2);
 };
 
-// this is the dp approach that uses memoization, it reduces the time complexity to O(N)
+// this is the dp approach that uses memoization (top-town), it reduces the time complexity to O(N)
 const fibonacci_dp = (position, memo = {}) => {
   if (position in memo) {
     return memo[position];
@@ -32,4 +32,21 @@ const fibonacci_dp = (position, memo = {}) => {
   return memo[position];
 };
 
-console.log(fibonacci_dp(50));
+// console.log(fibonacci_dp(50));
+
+// Tabulation (bottom-up) approach
+
+const fibonacci_tab = function (position) {
+  const table = Array(position + 1).fill(0);
+
+  table[1] = 1;
+
+  for (let i = 0; i <= position; i++) {
+    table[i + 1] += table[i];
+    table[i + 2] += table[i];
+  }
+
+  return table[position];
+};
+
+console.log(fibonacci_tab(50));
