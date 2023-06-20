@@ -1,5 +1,7 @@
 const targetSum = 100;
-const nums = [1, 2, 5, 25];
+const nums = [1, 2, 10, 25];
+
+// Using recursion with memoization (top-down) approach
 
 const bestSum = function (targetSum, nums, memo = {}) {
   if (targetSum in memo) {
@@ -30,4 +32,27 @@ const bestSum = function (targetSum, nums, memo = {}) {
   return shortestRes;
 };
 
-console.log(bestSum(targetSum, nums));
+// console.log(bestSum(targetSum, nums));
+
+// Using tabulation (bottom-up) approach
+
+const bestSum_tab = function (targetSum, nums) {
+  const table = Array(targetSum + 1).fill(null);
+
+  table[0] = [];
+
+  for (let i = 0; i <= targetSum; i++) {
+    if (table[i] !== null) {
+      for (let num of nums) {
+        const combination = [...table[i], num];
+        if (!table[i + num] || combination.length <= table[i + num].length) {
+          table[i + num] = combination;
+        }
+      }
+    }
+  }
+
+  return table[targetSum];
+};
+
+console.log(bestSum_tab(targetSum, nums));

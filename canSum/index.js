@@ -11,7 +11,7 @@ const canSum_tab = function (targetSum, nums) {
   for (let i = 0; i <= targetSum; i++) {
     if (results[i] === true) {
       for (let j = 0; j < nums.length; j++) {
-        if (i + j <= targetSum) {
+        if (i + nums[j] <= targetSum) {
           results[i + nums[j]] = true;
         }
       }

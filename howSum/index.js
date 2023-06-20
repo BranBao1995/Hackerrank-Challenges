@@ -1,5 +1,7 @@
-const targetSum = 300;
-const nums = [7, 14];
+const targetSum = 7;
+const nums = [5, 3, 4];
+
+// Using recursion with memoization (top-down) approach
 
 const howSum = function (targetSum, nums, memo = {}) {
   if (targetSum in memo) {
@@ -28,4 +30,26 @@ const howSum = function (targetSum, nums, memo = {}) {
   return memo[targetSum];
 };
 
-console.log(howSum(targetSum, nums));
+// console.log(howSum(targetSum, nums));
+
+// Using tabulation (bottom-up) approach
+
+const howSum_tab = function (targetSum, nums) {
+  const table = Array(targetSum + 1).fill(null);
+
+  table[0] = [];
+
+  for (let i = 0; i <= targetSum; i++) {
+    if (table[i] !== null) {
+      for (let num of nums) {
+        if (i + num <= targetSum) {
+          table[i + num] = [...table[i], num];
+        }
+      }
+    }
+  }
+
+  return table[targetSum];
+};
+
+console.log(howSum_tab(targetSum, nums));
