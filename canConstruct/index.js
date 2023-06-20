@@ -25,12 +25,45 @@ const canConstruct = function (target, strArr, memo = {}) {
   return memo[target];
 };
 
-console.log(
-  canConstruct("skateboard", ["bo", "rd", "ate", "t", "ska", "sk", "boar"])
-);
+// console.log(
+//   canConstruct("skateboard", ["bo", "rd", "ate", "t", "ska", "sk", "boar"])
+// );
+
+// console.log(
+//   canConstruct("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef", [
+//     "e",
+//     "ee",
+//     "eee",
+//     "eeee",
+//     "eeeee",
+//     "eeeeee",
+//   ])
+// );
+
+// Using tabulation (bottom-up) approach
+
+const canConstruct_tab = function (target, wordBank) {
+  const table = Array(target.length + 1).fill(false);
+
+  table[0] = true; // the 0th position in the table is an empty string, an empty string can always be constructed
+
+  for (let i = 0; i <= target.length; i++) {
+    if (table[i] === true) {
+      for (let word of wordBank) {
+        if (word === target.slice(i, i + word.length)) {
+          table[i + word.length] = true;
+        }
+      }
+    }
+  }
+
+  return table[target.length];
+};
+
+// console.log(canConstruct_tab("abcdef", ["ab", "abc", "cd", "def", "abcd"]));
 
 console.log(
-  canConstruct("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef", [
+  canConstruct_tab("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef", [
     "e",
     "ee",
     "eee",
