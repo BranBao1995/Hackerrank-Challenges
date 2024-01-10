@@ -10,6 +10,7 @@ class List {
     this.head = head;
   }
 
+  // find target node given an index
   node_at_index(index) {
     if (index === 0) {
       return this.head;
@@ -52,44 +53,42 @@ class List {
 
 const head = new Node(5);
 const list = new List(head);
-console.log(list.printList());
 
+// Add more nodes to the linked list
 let current_node = list.head;
 for (let i = 0; i < 20; i++) {
   current_node.next_node = new Node(Math.floor(Math.random() * 99));
   current_node = current_node.next_node;
 }
 
-console.log("List:\n" + list.printList());
-console.log("\nList Length: " + list.listLength());
-
 function mergeSort(list) {
+  // if linked list only has 1 or no nodes, return
   if (list.listLength() <= 1) {
     return list;
   }
 
-  const mid = Math.floor(list.listLength() / 2);
-  const mid_node = list.node_at_index(mid - 1);
-  let leftList = list;
-  let rightList = new List();
-  rightList.head = mid_node.next_node;
+  const mid = Math.floor(list.listLength() / 2); // find the mid point of the linked list
+  const mid_node = list.node_at_index(mid - 1); // find the node at the mid index
+  let leftList = list; // set left linked list to equal the full linked list
+  let rightList = new List(); // initiate an empty linked list
+  rightList.head = mid_node.next_node; // set the node following the mid node to be the head node of the right linked list
+  // set the next_node property of the mid node to null to sever the right hand side of
+  // the linked list
   mid_node.next_node = null;
-
-  //   console.log("\nLeft List:\n" + leftList.printList());
-
-  //   console.log("\nRight List:\n" + rightList.printList());
 
   return merge(mergeSort(leftList), mergeSort(rightList));
 }
 
 function merge(left, right) {
-  let sortedList = new List(new Node(0));
-  let sortedCurrent = sortedList.head;
-  let leftCurrent = left.head;
-  let rightCurrent = right.head;
+  let sortedList = new List(new Node(0)); // add a random node as a head
+  let sortedCurrent = sortedList.head; // final sorted list's current node
+  let leftCurrent = left.head; // left list's current node
+  let rightCurrent = right.head; // right list's current node
 
   while (leftCurrent && rightCurrent) {
+    //  while both the left and right current nodes are not null
     if (leftCurrent.data <= rightCurrent.data) {
+      // compare which node has bigger value, add the node to the final sorted list
       sortedCurrent.next_node = leftCurrent;
       sortedCurrent = sortedCurrent.next_node;
       leftCurrent = leftCurrent.next_node;
@@ -101,20 +100,22 @@ function merge(left, right) {
   }
 
   while (leftCurrent) {
+    // just in case there's still nodes that haven't been traversed in the left list, add these nodes to the final sorted list
     sortedCurrent.next_node = leftCurrent;
     sortedCurrent = sortedCurrent.next_node;
     leftCurrent = leftCurrent.next_node;
   }
 
   while (rightCurrent) {
+    // just in case there's still nodes that haven't been traversed in the left list, add these nodes to the final sorted list
     sortedCurrent.next_node = rightCurrent;
     sortedCurrent = sortedCurrent.next_node;
     rightCurrent = rightCurrent.next_node;
   }
 
-  sortedList.head = sortedList.head.next_node;
+  sortedList.head = sortedList.head.next_node; // removed the 0 value head and make the second node the new head
 
   return sortedList;
 }
 
-console.log("\nSorted List: \n" + mergeSort(list).printList());
+// console.log("\nSorted List: \n" + mergeSort(list).printList());
