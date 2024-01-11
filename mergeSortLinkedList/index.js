@@ -85,32 +85,26 @@ function merge(left, right) {
   let leftCurrent = left.head; // left list's current node
   let rightCurrent = right.head; // right list's current node
 
-  while (leftCurrent && rightCurrent) {
-    //  while both the left and right current nodes are not null
-    if (leftCurrent.data <= rightCurrent.data) {
-      // compare which node has bigger value, add the node to the final sorted list
+  while (leftCurrent || rightCurrent) {
+    if (!leftCurrent) {
+      sortedCurrent.next_node = rightCurrent;
+      rightCurrent = rightCurrent.next_node;
+    } else if (!rightCurrent) {
       sortedCurrent.next_node = leftCurrent;
-      sortedCurrent = sortedCurrent.next_node;
       leftCurrent = leftCurrent.next_node;
     } else {
-      sortedCurrent.next_node = rightCurrent;
-      sortedCurrent = sortedCurrent.next_node;
-      rightCurrent = rightCurrent.next_node;
+      //  while both the left and right current nodes are not nul
+      if (leftCurrent.data <= rightCurrent.data) {
+        // compare which node has bigger value, add the node to the final sorted list
+        sortedCurrent.next_node = leftCurrent;
+        leftCurrent = leftCurrent.next_node;
+      } else {
+        sortedCurrent.next_node = rightCurrent;
+        rightCurrent = rightCurrent.next_node;
+      }
     }
-  }
 
-  while (leftCurrent) {
-    // just in case there's still nodes that haven't been traversed in the left list, add these nodes to the final sorted list
-    sortedCurrent.next_node = leftCurrent;
     sortedCurrent = sortedCurrent.next_node;
-    leftCurrent = leftCurrent.next_node;
-  }
-
-  while (rightCurrent) {
-    // just in case there's still nodes that haven't been traversed in the left list, add these nodes to the final sorted list
-    sortedCurrent.next_node = rightCurrent;
-    sortedCurrent = sortedCurrent.next_node;
-    rightCurrent = rightCurrent.next_node;
   }
 
   sortedList.head = sortedList.head.next_node; // removed the 0 value head and make the second node the new head
