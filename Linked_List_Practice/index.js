@@ -123,6 +123,47 @@ function node_exists_recursive(head, target) {
 // );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+// find the node in a linked list with a specific index
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+// iterative approach
+function find_at_index_iterative(index, head) {
+  if (index < 0) return "Invalid index";
+
+  let current = head;
+
+  while (current) {
+    if (index === 0) {
+      return current.val;
+    }
+    current = current.next;
+    index -= 1;
+  }
+
+  return null;
+}
+
+// recursive approach
+function find_at_index_recursive(index, head) {
+  if (index < 0) {
+    return "Invalid index.";
+  }
+
+  if (!head) {
+    return null;
+  }
+
+  if (index === 0) {
+    return head.val;
+  }
+
+  return find_at_index_recursive(index - 1, head.next);
+}
+
+// console.log("\nThe node at the index is:\n" + find_at_index_iterative(5, head));
+// console.log("\nThe node at the index is:\n" + find_at_index_recursive(6, head));
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 // sort a list using merge sort
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
