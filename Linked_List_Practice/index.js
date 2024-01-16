@@ -164,6 +164,42 @@ function find_at_index_recursive(index, head) {
 // console.log("\nThe node at the index is:\n" + find_at_index_recursive(6, head));
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
+// reverse a linked list
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+// Iterative approach
+function reverse_list_iterative(head) {
+  let prev = null;
+  let current = head;
+
+  while (current) {
+    const next = current.next;
+    current.next = prev;
+    prev = current;
+    current = next;
+  }
+
+  return new List(prev);
+}
+
+// recursive approach
+function reverse_list_recursive(current, prev = null) {
+  if (!current) {
+    return new List(prev);
+  }
+
+  const next = current.next;
+  current.next = prev;
+  prev = current;
+  current = next;
+
+  return reverse_list_recursive(current, prev);
+}
+
+// console.log('\nThe reversed list is:\n' + reverse_list(head).print());
+console.log("\nThe reversed list is:\n" + reverse_list_recursive(head).print());
+
+///////////////////////////////////////////////////////////////////////////////////////////////
 // sort a list using merge sort
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
