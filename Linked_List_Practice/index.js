@@ -197,7 +197,67 @@ function reverse_list_recursive(current, prev = null) {
 }
 
 // console.log('\nThe reversed list is:\n' + reverse_list(head).print());
-console.log("\nThe reversed list is:\n" + reverse_list_recursive(head).print());
+// console.log("\nThe reversed list is:\n" + reverse_list_recursive(head).print());
+
+///////////////////////////////////////////////////////////////////////////////////////////////
+// Zipper lists - combine two lists together in an alternating fashion
+// Assume we should always start with the head of the 1st list
+// If one of the lists is shorter than the other, alternate as much as possible and just append the remainder of the longer list
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+// start by generating two lists
+const l1n1 = new Node("A"); // l1n1 = head of list 1
+const l1n2 = new Node("B");
+const l1n3 = new Node("C");
+const l1n4 = new Node("D");
+const l1n5 = new Node("E");
+
+l1n1.next = l1n2;
+l1n2.next = l1n3;
+l1n3.next = l1n4;
+l1n4.next = l1n5;
+
+const l2n1 = new Node(1); // l2n1 = head of list 2
+const l2n2 = new Node(2);
+const l2n3 = new Node(3);
+
+l2n1.next = l2n2;
+l2n2.next = l2n3;
+
+// at this point list 1 should look like
+// A -> B -> C -> D -> E
+// at this point list 2 should look like
+// 1 -> 2 -> 3
+
+function zipper_lists(head1, head2) {
+  let tail = head1; // tail starts at the head of the 1st list
+  let current1 = head1.next; // set current1 to be the 2nd node of the 1st list
+  let current2 = head2; // current2 starts at the head of the 2nd list
+
+  // since we start at the head of 1st list, when the count is an even number, we add a node from the 2nd list to the tail
+  let count = 0;
+
+  while (current1 && current2) {
+    if (count % 2 === 0) {
+      tail.next = current2;
+      current2 = current2.next;
+    } else {
+      tail.next = current1;
+      current1 = current1.next;
+    }
+    tail = tail.next;
+    count += 1;
+  }
+
+  if (!current1) tail.next = current2;
+  if (!current2) tail.next = current1;
+
+  return head1;
+}
+
+console.log(
+  "\nthe zipped list is\n" + JSON.stringify(zipper_lists(l1n1, l2n1))
+);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // sort a list using merge sort
