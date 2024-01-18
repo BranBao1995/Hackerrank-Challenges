@@ -229,7 +229,7 @@ l2n2.next = l2n3;
 // at this point list 2 should look like
 // 1 -> 2 -> 3
 
-function zipper_lists(head1, head2) {
+function zipper_lists_iterative(head1, head2) {
   let tail = head1; // tail starts at the head of the 1st list
   let current1 = head1.next; // set current1 to be the 2nd node of the 1st list
   let current2 = head2; // current2 starts at the head of the 2nd list
@@ -255,9 +255,36 @@ function zipper_lists(head1, head2) {
   return head1;
 }
 
-console.log(
-  "\nthe zipped list is\n" + JSON.stringify(zipper_lists(l1n1, l2n1))
-);
+function zipper_lists_recursive(head1, head2) {
+  // List 1 = A -> B -> C -> D -> E
+  // List 2 = 1 -> 2 -> 3
+  if (!head1 && !head2) {
+    return null;
+  }
+
+  if (!head1) {
+    return head2;
+  }
+
+  if (!head2) {
+    return head1;
+  }
+
+  const next1 = head1.next;
+  const next2 = head2.next;
+  head1.next = head2;
+  head2.next = zipper_lists_recursive(next1, next2);
+
+  return head1;
+}
+
+// console.log(
+//   "\nthe zipped list is\n" + JSON.stringify(zipper_lists_iterative(l1n1, l2n1))
+// );
+
+// console.log(
+//   "\nthe zipped list is\n" + JSON.stringify(zipper_lists_recursive(l1n1, l2n1))
+// );
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 // sort a list using merge sort
