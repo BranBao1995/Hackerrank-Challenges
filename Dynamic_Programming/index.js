@@ -166,8 +166,8 @@ function canSum_memo(targetSum, numbers, memo = {}) {
 // If there are multiple combinations possible, you may return any single one.
 ///////////////////////////////////////////////////////////////////////////////
 
-const targetSum = 1000;
-const numbers = [7, 14];
+// const targetSum = 1000;
+// const numbers = [7, 14];
 
 // solution without dynamic programming
 // with time complexity of O(n^m * m) the addtional m coming from the copying of the array with a worst case of m elements
@@ -221,4 +221,75 @@ function howSum_memo(targetSum, numbers, memo = {}) {
   return memo[targetSum];
 }
 
-console.log(howSum_memo(targetSum, numbers));
+// console.log(howSum_memo(targetSum, numbers));
+
+///////////////////////////////////////////////////////////////////////////////
+// bestSum(targetSum, numbers)
+// Write a function that takes in a targetSum and an array of numbers as arguments.
+// The function should return an array containing the shortest combination of numbers that add up to exactly the targetSum.
+// If there is a tie for the shortest combination, you may return any one of the shortests.
+///////////////////////////////////////////////////////////////////////////////
+
+const targetSum = 777;
+const numbers = [1, 1, 1];
+
+// solution without dynamic programming
+// with time complexity of O(n^m * n)
+// with space complexity of O(m^2) because each recursive call stores an array of at most 'm' elements
+function bestSum(targetSum, numbers) {
+  if (targetSum === 0) {
+    return [];
+  }
+
+  if (targetSum < 0) {
+    return null;
+  }
+
+  let res = null;
+
+  for (let number of numbers) {
+    const combination_lower = bestSum(targetSum - number, numbers);
+    if (combination_lower !== null) {
+      const combination = [...combination_lower, number];
+      if (res === null || combination.length <= res.length) {
+        res = combination;
+      }
+    }
+  }
+
+  return res;
+}
+
+// console.log(bestSum(targetSum, numbers));
+
+// solution with memoization (top-down) approach
+// with time complexity of O(n*m*n)
+// with space complexity of O(m^3)
+function bestSum_memo(targetSum, numbers, memo = {}) {
+  if (targetSum in memo) {
+    return memo[targetSum];
+  }
+  if (targetSum === 0) {
+    return [];
+  }
+  if (targetSum < 0) {
+    return null;
+  }
+
+  let res = null;
+
+  for (let number of numbers) {
+    const combination_lower = bestSum_memo(targetSum - number, numbers, memo);
+    if (combination_lower !== null) {
+      const combination = [...combination_lower, number];
+      if (res === null || combination.length <= res) {
+        res = combination;
+      }
+    }
+  }
+
+  memo[targetSum] = res;
+  return memo[targetSum];
+}
+
+console.log(bestSum_memo(targetSum, numbers));
