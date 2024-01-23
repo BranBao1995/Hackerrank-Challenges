@@ -230,8 +230,8 @@ function howSum_memo(targetSum, numbers, memo = {}) {
 // If there is a tie for the shortest combination, you may return any one of the shortests.
 ///////////////////////////////////////////////////////////////////////////////
 
-const targetSum = 777;
-const numbers = [1, 1, 1];
+// const targetSum = 777;
+// const numbers = [1, 1, 1];
 
 // solution without dynamic programming
 // with time complexity of O(n^m * n)
@@ -264,7 +264,7 @@ function bestSum(targetSum, numbers) {
 
 // solution with memoization (top-down) approach
 // with time complexity of O(n*m*n)
-// with space complexity of O(m^3)
+// with space complexity of O(m^2)
 function bestSum_memo(targetSum, numbers, memo = {}) {
   if (targetSum in memo) {
     return memo[targetSum];
@@ -292,4 +292,60 @@ function bestSum_memo(targetSum, numbers, memo = {}) {
   return memo[targetSum];
 }
 
-console.log(bestSum_memo(targetSum, numbers));
+// console.log(bestSum_memo(targetSum, numbers));
+
+///////////////////////////////////////////////////////////////////////////////
+// canConstruct(target, wordBank)
+// Write a function that accepts a target string and an array of strings.
+// The function should return a boolean indicating whether or not the 'target' can be constructed ...
+// by concatenating elements of the 'wordBank' array.
+// You may reuse elements of 'wordBnak' as many times as needed.
+///////////////////////////////////////////////////////////////////////////////
+
+// const target = "eeeeeeeeeeeeeeeeeeeeeeeeeeef";
+// const wordBank = ["e", "ee", "eee", "eeee", "eeeee", "eeeeee"];
+
+// solution without dynamic programming
+// with time complexity of O(n^m*m)
+// with space complexity of O(m^2)
+function canConstruct(target, wordBank) {
+  if (target === "") {
+    return true;
+  }
+  for (let word of wordBank) {
+    if (target.lastIndexOf(word, 0) === 0) {
+      const newTarget = target.replace(word, "");
+      if (canConstruct(newTarget, wordBank) === true) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
+
+// console.log(canConstruct(target, wordBank));
+
+// solution with memoization (top-down) approach
+// with time complexity of O(n*m^2)
+// with space complexity if O(m^2)
+function canConstruct_memo(target, wordBank, memo = {}) {
+  if (target in memo) {
+    return memo[target];
+  }
+  if (target === "") {
+    return true;
+  }
+  for (let word of wordBank) {
+    if (target.lastIndexOf(word, 0) === 0) {
+      const newTarget = target.replace(word, "");
+      if (canConstruct_memo(newTarget, wordBank, memo) === true) {
+        memo[target] = true;
+        return memo[target];
+      }
+    }
+  }
+  memo[target] = false;
+  return memo[target];
+}
+
+// console.log(canConstruct_memo(target, wordBank));
