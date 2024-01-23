@@ -349,3 +349,128 @@ function canConstruct_memo(target, wordBank, memo = {}) {
 }
 
 // console.log(canConstruct_memo(target, wordBank));
+
+///////////////////////////////////////////////////////////////////////////////
+// countConstruct(target, wordBank)
+// Write a function that accepts a target string and an array of strings.
+// The function should return the number of ways that the 'target' can be constructed by...
+// concatenating elements of the 'wordBank' array.
+// You many reuse elements of 'wordBank' as many times as needed
+///////////////////////////////////////////////////////////////////////////////
+
+// const target = "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef";
+// const wordBank = ["e", "ee", "eee", "eeee", "eeeee", "eeeeee"];
+
+// solution without dynamic programming
+// with time complexity of O(n^m*m)
+// with space complexity of O(m^2)
+function countConstruct(target, wordBank) {
+  if (target === "") {
+    return 1;
+  }
+  let res = 0;
+
+  for (let word of wordBank) {
+    if (target.lastIndexOf(word, 0) === 0) {
+      const newTarget = target.replace(word, "");
+      const ways = countConstruct(newTarget, wordBank);
+      res += ways;
+    }
+  }
+
+  return res;
+}
+
+// console.log(countConstruct(target, wordBank));
+
+// solution with memoization (top-down) approach
+// with time complexity of O(n*m^2)
+// with space complexity of O(m^2)
+function countConstruct_memo(target, wordBank, memo = {}) {
+  if (target in memo) {
+    return memo[target];
+  }
+  if (target === "") {
+    return 1;
+  }
+
+  let res = 0;
+
+  for (let word of wordBank) {
+    if (target.lastIndexOf(word, 0) === 0) {
+      const newTarget = target.replace(word, "");
+      const ways = countConstruct_memo(newTarget, wordBank, memo);
+      res += ways;
+    }
+  }
+
+  memo[target] = res;
+  return memo[target];
+}
+
+// console.log(countConstruct_memo(target, wordBank));
+
+///////////////////////////////////////////////////////////////////////////////
+// allConstruct(target, wordBank)
+// Write a function that accepts a target string and an array of strings
+// The function should return a 2D array containing all of the ways that the 'target'...
+// can be constructed by concatenating elements of the 'wordBank' array.
+// Each element of the 2D array should represent one combination that constructs the 'target'
+// You may reuse elements of 'wordBank' as many times as needed.
+///////////////////////////////////////////////////////////////////////////////
+
+const target = "eeeeeeeeeeeeeeeeeeeeef";
+const wordBank = ["e", "ee", "eee", "eeee", "eeeee", "eeeeee"];
+
+// solution without dynamic programming
+// with time complexity of O(n^m)
+// with space complexity of O(m)
+
+function allConstruct(target, wordBank) {
+  if (target === "") {
+    return [[]];
+  }
+
+  const set = [];
+
+  for (let word of wordBank) {
+    if (target.lastIndexOf(word, 0) === 0) {
+      const newTarget = target.replace(word, "");
+      const ways = allConstruct(newTarget, wordBank);
+      const ways_updated = ways.map((way) => [...way, word]);
+      set.push(...ways_updated);
+    }
+  }
+  return set;
+}
+
+// console.log(allConstruct(target, wordBank));
+
+// solution with memoization (top-down approach)
+// with time complexity of O(n^m)
+// with space complexity of O(m)
+function allConstruct_memo(target, wordBank, memo = {}) {
+  if (target in memo) {
+    return memo[target];
+  }
+
+  if (target === "") {
+    return [[]];
+  }
+
+  const set = [];
+
+  for (let word of wordBank) {
+    if (target.lastIndexOf(word, 0) === 0) {
+      const newTarget = target.replace(word, "");
+      const ways = allConstruct_memo(newTarget, wordBank, memo);
+      const ways_updated = ways.map((way) => [...way, word]);
+      set.push(...ways_updated);
+    }
+  }
+
+  memo[target] = set;
+  return memo[target];
+}
+
+// console.log(allConstruct_memo(target, wordBank));
