@@ -38,6 +38,21 @@ function fib_memo(n, memo = {}) {
 
 // console.log(fib_memo(100));
 
+// solution with tabulation (bottom-up) approach
+// with time complexity of O(n);
+// with space complexity of O(n);
+function fib_tab(n) {
+  const table = Array(n + 1).fill(0);
+  table[1] = 1;
+  for (let i = 0; i <= n; i++) {
+    table[i + 1] += table[i];
+    table[i + 2] += table[i];
+  }
+  return table[n];
+}
+
+// console.log(fib_tab(6));
+
 ///////////////////////////////////////////////////////////////////////////////
 // Grid Traveler 2D
 // Say that are a traveler on a 2D grid. You begin in the top-left corner and your goal is to travel to the bottom-right corner
@@ -92,6 +107,37 @@ function grid_traveler_memo(m, n, memo = {}) {
 }
 
 // console.log(grid_traveler_memo(3, 3));
+
+// solution with tabulation (bottom-up) approach
+// with time complexity of O(mn)
+// with space complexity of O(mn)
+function grid_traveler_tab(m, n) {
+  const table = Array(m + 1)
+    .fill()
+    .map(() => Array(n + 1).fill(0));
+
+  table[1][1] = 1;
+  console.log("\ntable after filling is now\n" + table);
+  for (let i = 0; i <= m; i++) {
+    for (let j = 0; j <= n; j++) {
+      if (j + 1 <= n) table[i][j + 1] += table[i][j];
+      if (i + 1 <= m) table[i + 1][j] += table[i][j];
+    }
+  }
+  console.log(
+    "\ntable after iteration is now\n" +
+      table[0] +
+      "\n" +
+      table[1] +
+      "\n" +
+      table[2] +
+      "\n" +
+      table[3]
+  );
+  return table[m][n];
+}
+
+// console.log(grid_traveler_tab(3, 3));
 
 ///////////////////////////////////////////////////////////////////////////////
 // canSum(targetSum, numbers)
@@ -157,6 +203,24 @@ function canSum_memo(targetSum, numbers, memo = {}) {
 
 // console.log(canSum_memo(targetSum, numbers));
 
+// solution with tabulation (bottom-up) approach
+// time complexity of O(mn)
+// space complexity of O(m)
+function canSum_tab(targetSum, numbers) {
+  const table = new Array(targetSum + 1).fill(false);
+  table[0] = true;
+  for (let i = 0; i < table.length; i++) {
+    if (table[i] === true) {
+      for (let j = 0; j < numbers.length; j++) {
+        if (i + numbers[j] <= targetSum) table[i + numbers[j]] = true;
+      }
+    }
+  }
+  return table[targetSum];
+}
+
+// console.log(canSum_tab(targetSum, numbers));
+
 ///////////////////////////////////////////////////////////////////////////////
 // howSum(targetSum, numbers)
 // Write a function that takes in a targetSum and an array of numbers as arguments.
@@ -166,8 +230,8 @@ function canSum_memo(targetSum, numbers, memo = {}) {
 // If there are multiple combinations possible, you may return any single one.
 ///////////////////////////////////////////////////////////////////////////////
 
-// const targetSum = 1000;
-// const numbers = [7, 14];
+// const targetSum = 7;
+// const numbers = [5, 3, 4];
 
 // solution without dynamic programming
 // with time complexity of O(n^m * m) the addtional m coming from the copying of the array with a worst case of m elements
@@ -223,6 +287,25 @@ function howSum_memo(targetSum, numbers, memo = {}) {
 
 // console.log(howSum_memo(targetSum, numbers));
 
+// solution with tabulation (bottom-up) approach
+// time complexity of O(m^2*n)
+// space complexity of O(m^2)
+function howSum_tab(targetSum, numbers) {
+  const table = new Array(targetSum + 1).fill(null);
+  table[0] = [];
+  for (let i = 0; i < table.length; i++) {
+    if (table[i] !== null) {
+      for (let num of numbers) {
+        if (i + num <= targetSum) table[i + num] = [...table[i], num];
+      }
+    }
+  }
+
+  return table[targetSum];
+}
+
+// console.log(howSum_tab(targetSum, numbers));
+
 ///////////////////////////////////////////////////////////////////////////////
 // bestSum(targetSum, numbers)
 // Write a function that takes in a targetSum and an array of numbers as arguments.
@@ -230,8 +313,8 @@ function howSum_memo(targetSum, numbers, memo = {}) {
 // If there is a tie for the shortest combination, you may return any one of the shortests.
 ///////////////////////////////////////////////////////////////////////////////
 
-// const targetSum = 777;
-// const numbers = [1, 1, 1];
+const targetSum = 1000;
+const numbers = [7, 14];
 
 // solution without dynamic programming
 // with time complexity of O(n^m * n)
@@ -294,6 +377,27 @@ function bestSum_memo(targetSum, numbers, memo = {}) {
 
 // console.log(bestSum_memo(targetSum, numbers));
 
+// solution with tabulation (bottom-up) approach
+// time complexity of O(m^2*n)
+// space complexity of O(m^2)
+function bestSum_tab(targetSum, numbers) {
+  const table = new Array(targetSum + 1).fill(null);
+  table[0] = [];
+  for (let i = 0; i < table.length; i++) {
+    if (table[i] !== null) {
+      for (let num of numbers) {
+        // if the index position already has a combination, the combinations found after will always not be shorter.
+        if (i + num <= targetSum && table[i + num] === null)
+          table[i + num] = [...table[i], num];
+      }
+    }
+  }
+
+  return table[targetSum];
+}
+
+// console.log(bestSum_tab(targetSum, numbers));
+
 ///////////////////////////////////////////////////////////////////////////////
 // canConstruct(target, wordBank)
 // Write a function that accepts a target string and an array of strings.
@@ -349,6 +453,39 @@ function canConstruct_memo(target, wordBank, memo = {}) {
 }
 
 // console.log(canConstruct_memo(target, wordBank));
+
+// solution with tabulation (bottom-up) approach
+// time complexity of O(m^2*n)
+// space complexity of O(m)
+function canConstruct_tab(target, wordBank) {
+  const table = new Array(target.length + 1).fill(false);
+  table[0] = true;
+  for (let i = 0; i < table.length; i++) {
+    if (table[i] === true) {
+      for (let word of wordBank) {
+        if (target.slice(i, i + word.length) === word) {
+          table[i + word.length] = true;
+        }
+      }
+    }
+  }
+  return table[target.length];
+}
+
+console.log(canConstruct_tab("abcdef", ["ab", "abc", "cd", "def", "abcd"]));
+console.log(
+  canConstruct_tab("skateboard", ["bo", "rd", "ate", "t", "ska", "sk", "boar"])
+);
+console.log(
+  canConstruct_tab("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef", [
+    "e",
+    "ee",
+    "eee",
+    "eeee",
+    "eeeee",
+    "eeeeee",
+  ])
+);
 
 ///////////////////////////////////////////////////////////////////////////////
 // countConstruct(target, wordBank)
