@@ -406,9 +406,6 @@ function bestSum_tab(targetSum, numbers) {
 // You may reuse elements of 'wordBnak' as many times as needed.
 ///////////////////////////////////////////////////////////////////////////////
 
-// const target = "eeeeeeeeeeeeeeeeeeeeeeeeeeef";
-// const wordBank = ["e", "ee", "eee", "eeee", "eeeee", "eeeeee"];
-
 // solution without dynamic programming
 // with time complexity of O(n^m*m)
 // with space complexity of O(m^2)
@@ -426,8 +423,6 @@ function canConstruct(target, wordBank) {
   }
   return false;
 }
-
-// console.log(canConstruct(target, wordBank));
 
 // solution with memoization (top-down) approach
 // with time complexity of O(n*m^2)
@@ -452,8 +447,6 @@ function canConstruct_memo(target, wordBank, memo = {}) {
   return memo[target];
 }
 
-// console.log(canConstruct_memo(target, wordBank));
-
 // solution with tabulation (bottom-up) approach
 // time complexity of O(m^2*n)
 // space complexity of O(m)
@@ -472,20 +465,20 @@ function canConstruct_tab(target, wordBank) {
   return table[target.length];
 }
 
-console.log(canConstruct_tab("abcdef", ["ab", "abc", "cd", "def", "abcd"]));
-console.log(
-  canConstruct_tab("skateboard", ["bo", "rd", "ate", "t", "ska", "sk", "boar"])
-);
-console.log(
-  canConstruct_tab("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef", [
-    "e",
-    "ee",
-    "eee",
-    "eeee",
-    "eeeee",
-    "eeeeee",
-  ])
-);
+// console.log(canConstruct_tab("abcdef", ["ab", "abc", "cd", "def", "abcd"]));
+// console.log(
+//   canConstruct_tab("skateboard", ["bo", "rd", "ate", "t", "ska", "sk", "boar"])
+// );
+// console.log(
+//   canConstruct_tab("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef", [
+//     "e",
+//     "ee",
+//     "eee",
+//     "eeee",
+//     "eeeee",
+//     "eeeeee",
+//   ])
+// );
 
 ///////////////////////////////////////////////////////////////////////////////
 // countConstruct(target, wordBank)
@@ -494,9 +487,6 @@ console.log(
 // concatenating elements of the 'wordBank' array.
 // You many reuse elements of 'wordBank' as many times as needed
 ///////////////////////////////////////////////////////////////////////////////
-
-// const target = "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef";
-// const wordBank = ["e", "ee", "eee", "eeee", "eeeee", "eeeeee"];
 
 // solution without dynamic programming
 // with time complexity of O(n^m*m)
@@ -517,8 +507,6 @@ function countConstruct(target, wordBank) {
 
   return res;
 }
-
-// console.log(countConstruct(target, wordBank));
 
 // solution with memoization (top-down) approach
 // with time complexity of O(n*m^2)
@@ -545,7 +533,48 @@ function countConstruct_memo(target, wordBank, memo = {}) {
   return memo[target];
 }
 
-// console.log(countConstruct_memo(target, wordBank));
+// solution with tabulation (bottom-up) approach
+// with time complexity of O(m^2*n)
+// with space complexity of O(m)
+function countConstruct_tab(target, wordBank) {
+  const table = new Array(target.length + 1).fill(0);
+  table[0] = 1;
+
+  for (let i = 0; i < table.length; i++) {
+    for (let word of wordBank) {
+      if (target.slice(i, i + word.length) === word) {
+        table[i + word.length] += table[i];
+      }
+    }
+  }
+
+  return table[target.length];
+}
+
+// console.log(
+//   countConstruct_tab("abcdef", ["ab", "abc", "cd", "def", "abcd", "ef"])
+// );
+// console.log(
+//   countConstruct_tab("skateboard", [
+//     "bo",
+//     "rd",
+//     "ate",
+//     "t",
+//     "ska",
+//     "sk",
+//     "boar",
+//   ])
+// );
+// console.log(
+//   countConstruct_tab("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef", [
+//     "e",
+//     "ee",
+//     "eee",
+//     "eeee",
+//     "eeeee",
+//     "eeeeee",
+//   ])
+// );
 
 ///////////////////////////////////////////////////////////////////////////////
 // allConstruct(target, wordBank)
@@ -555,9 +584,6 @@ function countConstruct_memo(target, wordBank, memo = {}) {
 // Each element of the 2D array should represent one combination that constructs the 'target'
 // You may reuse elements of 'wordBank' as many times as needed.
 ///////////////////////////////////////////////////////////////////////////////
-
-const target = "eeeeeeeeeeeeeeeeeeeeef";
-const wordBank = ["e", "ee", "eee", "eeee", "eeeee", "eeeeee"];
 
 // solution without dynamic programming
 // with time complexity of O(n^m)
@@ -580,8 +606,6 @@ function allConstruct(target, wordBank) {
   }
   return set;
 }
-
-// console.log(allConstruct(target, wordBank));
 
 // solution with memoization (top-down approach)
 // with time complexity of O(n^m)
@@ -610,4 +634,37 @@ function allConstruct_memo(target, wordBank, memo = {}) {
   return memo[target];
 }
 
-// console.log(allConstruct_memo(target, wordBank));
+// solution with tabulation (bottom-up) approach
+// with time complexity of exponential complexity
+// with space complexity of exponential complexity
+function allConstruct_tab(target, wordBank) {
+  const table = new Array(target.length + 1).fill().map(() => []);
+  table[0] = [[]];
+  for (let i = 0; i < table.length; i++) {
+    for (let word of wordBank) {
+      if (target.slice(i, i + word.length) === word) {
+        const temp = table[i].map((el) => [...el, word]);
+        table[i + word.length] = [...temp, ...table[i + word.length]];
+      }
+    }
+  }
+
+  return table[target.length];
+}
+
+console.log(
+  allConstruct_tab("abcdef", ["ab", "abc", "cd", "def", "abcd", "ef"])
+);
+console.log(
+  allConstruct_tab("skateboard", ["bo", "rd", "ate", "t", "ska", "sk", "boar"])
+);
+console.log(
+  allConstruct_tab("eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeef", [
+    "e",
+    "ee",
+    "eee",
+    "eeee",
+    "eeeee",
+    "eeeeee",
+  ])
+);
